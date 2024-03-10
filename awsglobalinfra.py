@@ -1,12 +1,26 @@
 from diagrams import Diagram, Cluster
-from diagrams.aws.iot import IotAnalyticsDataStore
+from diagrams.aws.compute import EC2
+from diagrams.aws.network import ELB
 
-with Diagram("AWS Global Infrastructure", show=True):
-    with Cluster("AWS Cloud"):
+cluster_attr = {
+    "fontsize": "15",
+    "bgcolor": "transparent",
+}
 
-        with Cluster("Regions"):
-            with Cluster("Availability Zone 2") as az_2:
-                az1_resource = IotAnalyticsDataStore("AWS Resources")
+block_attr = {
+    "fontsize": "15",
+    "bgcolor": "lightgreen",
 
-            with Cluster("Availability Zone 1") as az_1:
-                az2_resource = IotAnalyticsDataStore("AWS Resources")
+}
+
+with Diagram("AWS Global Infrastructure"):
+    with Cluster("AWS Cloud", graph_attr=cluster_attr):
+
+        with Cluster("Region", graph_attr=cluster_attr):
+            lb = ELB("lb")
+            with Cluster("Availability Zone 1", graph_attr=block_attr) as az_1:
+                az1_resource = EC2("AWS Resources")
+
+            with Cluster("Availability Zone 2", graph_attr=block_attr) as az_2:
+                az2_resource = EC2("AWS Resources")
+            lb >> [az1_resource, az2_resource]
