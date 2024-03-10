@@ -6,7 +6,7 @@ from diagrams.onprem.database import MongoDB
 from diagrams.onprem.inmemory import Redis
 from diagrams.aws.general import InternetGateway
 
-with Diagram("Trading system"):
+with Diagram("Trading system", direction="TB"):
     # ELB("lb") >> EC2("web") >> RDS("userdb")
     with Cluster("DB") as db:
         sql = MySQL("MySQL")
